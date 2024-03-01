@@ -1,5 +1,0 @@
-autoflake
-black
-discord.py==2.2.3
-isort
-pyparsing

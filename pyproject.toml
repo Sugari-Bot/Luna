@@ -1,10 +1,65 @@
+[tool.poetry]
+name = "luna"
+version = "2.7.0"
+description = "An easy drop in user-provided Templating system."
+authors = ["AmazingAkai <akai.is.amazing@gmail.com>"]
+license = "Creative Commons Attribution 4.0 International License"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+discord = "^2.3.2"
+expr-py = "^0.3.0"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.1.7"
+
 [build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
 
-[tool.black]
-line-length = 99
+[tool.ruff]
+line-length = 125
 
-[tool.isort]
-profile = "black"
-line_length = 99
+[tool.ruff.lint]
+select = [
+    "E",
+    "W",
+    "C90",
+    "F",
+    "UP",
+    "B",
+    "SIM",
+    "I",
+    "N",
+    "ANN",
+    "ASYNC",
+    "C4",
+    "EM",
+    "FA",
+    "ICN",
+    "G",
+    "PIE",
+    "T20",
+    "ARG",
+    "ERA",
+    "LOG",
+    "PL",
+    "TRY",
+]
+ignore = [
+    "E501",
+    "ANN401",
+    "ANN101",
+    "ANN102",
+    "ANN002",
+    "ANN003",
+    "PLR0913",
+    "PLR2004",
+    "PLR0917",
+    "PLR6301",
+]
+preview = true
+
+[tool.ruff.lint.pyupgrade]
+keep-runtime-typing = true
