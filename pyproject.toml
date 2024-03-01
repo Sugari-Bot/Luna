@@ -5,6 +5,7 @@ description = "An easy drop in user-provided Templating system."
 authors = ["AmazingAkai <akai.is.amazing@gmail.com>"]
 license = "Creative Commons Attribution 4.0 International License"
 readme = "README.md"
+packages = [{include = "luna"}]
 
 [tool.poetry.dependencies]
 python = "^3.8"
