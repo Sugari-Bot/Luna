@@ -1,6 +1,9 @@
 from __future__ import annotations
 
-from .interpreter import Interpreter, Response
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .interpreter import Interpreter, Response
 
 __all__ = (
     "LunaError",
@@ -20,11 +23,14 @@ class WorkloadExceededError(LunaError):
 
 class ProcessError(LunaError):
     def __init__(
-        self, error: Exception, response: Response, interpreter: Interpreter
+        self,
+        error: Exception,
+        response: Response,
+        interpreter: Interpreter,
     ) -> None:
-        self.original: Exception = error
-        self.response: Response = response
-        self.interpreter: Interpreter = interpreter
+        self.original = error
+        self.response = response
+        self.interpreter = interpreter
         super().__init__(error)
 
 
