@@ -1,11 +1,6 @@
-[build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
-
-[tool.ruff]
 line-length = 125
 
-[tool.ruff.lint]
+[lint]
 select = [
     "E",
     "W",
@@ -45,5 +40,5 @@ ignore = [
 ]
 preview = true
 
-[tool.ruff.lint.pyupgrade]
+[pyupgrade]
 keep-runtime-typing = true
