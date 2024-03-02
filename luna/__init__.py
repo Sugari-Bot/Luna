@@ -4,3 +4,5 @@ __all__ = (
     "AsyncInterpreter",
     "Interpreter",
 )
+
+__version__ = "2.7.1"
