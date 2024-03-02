@@ -2,6 +2,7 @@ from .assign import AssignmentBlock
 from .breakblock import BreakBlock
 from .control import AllBlock, AnyBlock, IfBlock
 from .fiftyfifty import FiftyFiftyBlock
+from .loosevariablegetter import LooseVariableGetterBlock
 from .mathblock import MathBlock
 from .randomblock import RandomBlock
 from .range import RangeBlock
@@ -18,6 +19,7 @@ __all__ = (
     "AssignmentBlock",
     "BreakBlock",
     "FiftyFiftyBlock",
+    "LooseVariableGetterBlock",
     "IfBlock",
     "MathBlock",
     "PythonBlock",
