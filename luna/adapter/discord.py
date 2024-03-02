@@ -41,16 +41,16 @@ class SnowflakeAdapter(Adapter):
     def update_methods(self) -> None:
         pass
 
-    def get_value(self, ctx: Verb) -> str:
+    def get_value(self, verb: Verb) -> str:
         should_escape = False
 
-        if ctx.parameter is None:
+        if verb.parameter is None:
             return_value = str(self._underlying)
         else:
             try:
-                value = self._attributes[ctx.parameter]
+                value = self._attributes[verb.parameter]
             except KeyError:
-                if method := self._methods.get(ctx.parameter):
+                if method := self._methods.get(verb.parameter):
                     value = method()
                 else:
                     return ""

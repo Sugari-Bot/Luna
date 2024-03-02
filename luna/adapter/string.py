@@ -13,23 +13,23 @@ class StringAdapter(Adapter):
     def __repr__(self) -> str:
         return f"<{type(self).__qualname__} string={repr(self.string)}>"
 
-    def get_value(self, ctx: Verb) -> str:
-        return self.return_value(self.handle_ctx(ctx))
+    def get_value(self, verb: Verb) -> str:
+        return self.return_value(self.handle(verb))
 
-    def handle_ctx(self, ctx: Verb) -> str:
-        if ctx.parameter is None:
+    def handle(self, verb: Verb) -> str:
+        if verb.parameter is None:
             return self.string
         try:
-            if "+" not in ctx.parameter:
-                index = int(ctx.parameter) - 1
-                splitter = " " if ctx.payload is None else ctx.payload
+            if "+" not in verb.parameter:
+                index = int(verb.parameter) - 1
+                splitter = " " if verb.payload is None else verb.payload
                 return self.string.split(splitter)[index]
             else:
-                index = int(ctx.parameter.replace("+", "")) - 1
-                splitter = " " if ctx.payload is None else ctx.payload
-                if ctx.parameter.startswith("+"):
+                index = int(verb.parameter.replace("+", "")) - 1
+                splitter = " " if verb.payload is None else verb.payload
+                if verb.parameter.startswith("+"):
                     return splitter.join(self.string.split(splitter)[: index + 1])
-                elif ctx.parameter.endswith("+"):
+                elif verb.parameter.endswith("+"):
                     return splitter.join(self.string.split(splitter)[index:])
                 else:
                     return self.string.split(splitter)[index]

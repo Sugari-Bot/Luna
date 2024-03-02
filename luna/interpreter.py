@@ -16,7 +16,6 @@ __all__ = (
     "Context",
     "Response",
     "Node",
-    "build_node_tree",
 )
 
 log = logging.getLogger(__name__)
@@ -28,7 +27,9 @@ class Node:
     __slots__ = ("output", "verb", "coordinates")
 
     def __init__(
-        self, coordinates: Tuple[int, int], verb: Optional[Verb] = None
+        self,
+        coordinates: Tuple[int, int],
+        verb: Optional[Verb] = None,
     ) -> None:
         self.output: Optional[str] = None
         self.verb = verb
@@ -40,24 +41,24 @@ class Node:
     def __repr__(self) -> str:
         return f"<Node verb={self.verb!r} coordinates={self.coordinates!r} output={self.output!r}>"
 
+    @classmethod
+    def build_tree(cls, message: str) -> List[Node]:
+        nodes = []
+        previous = r""
 
-def build_node_tree(message: str) -> List[Node]:
-    nodes = []
-    previous = r""
+        starts = []
+        for i, ch in enumerate(message):
+            if ch == "{" and previous != r"\\":
+                starts.append(i)
+            if ch == "}" and previous != r"\\":
+                if not starts:
+                    continue
+                coords = (starts.pop(), i)
+                n = cls(coords)
+                nodes.append(n)
 
-    starts = []
-    for i, ch in enumerate(message):
-        if ch == "{" and previous != r"\\":
-            starts.append(i)
-        if ch == "}" and previous != r"\\":
-            if not starts:
-                continue
-            coords = (starts.pop(), i)
-            n = Node(coords)
-            nodes.append(n)
-
-        previous = ch
-    return nodes
+            previous = ch
+        return nodes
 
 
 class Response:
@@ -122,15 +123,11 @@ class Interpreter:
         node.verb = Verb(final[start : end + 1], limit=verb_limit)
         return Context(node.verb, response, self, original_message)
 
-    def _get_acceptors(self, ctx: Context) -> List[Block]:
-        acceptors = [b for b in self.blocks if b.will_accept(ctx)]
-        log.debug("%r acceptors: %r", ctx, acceptors)
-        return acceptors
-
     def _process_blocks(self, ctx: Context, node: Node) -> Optional[str]:
-        acceptors = self._get_acceptors(ctx)
-        for b in acceptors:
-            value = b.process(ctx)
+        for block in self.blocks:
+            if not block.will_accept(ctx):
+                continue
+            value = block.process(ctx)
             if value is not None:  # Value found? We're done here.
                 value = str(value)
                 node.output = value
@@ -231,7 +228,7 @@ class Interpreter:
         **kwargs,
     ) -> Response:
         response = Response(variables=seed_variables, extra_kwargs=kwargs)
-        node_ordered_list = build_node_tree(message)
+        node_ordered_list = Node.build_tree(message)
         try:
             output = self._solve(
                 message,
@@ -305,7 +302,7 @@ class AsyncInterpreter(Interpreter):
         **kwargs,
     ) -> Response:
         response = Response(variables=seed_variables, extra_kwargs=kwargs)
-        node_ordered_list = build_node_tree(message)
+        node_ordered_list = Node.build_tree(message)
         try:
             output = await self._solve(
                 message,
