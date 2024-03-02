@@ -12,4 +12,5 @@ setup(
         "luna.block",
         "luna.interface",
     ],
+    requires=["discord.py", "expr.py"],
 )
