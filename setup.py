@@ -2,7 +2,9 @@ import re
 
 from setuptools import setup
 
-version = None
+with open("requirements.txt", encoding="utf-8") as f:
+    requirements = f.read().splitlines()
+
 with open("luna/__init__.py", encoding="utf-8") as f:
     version = re.search(
         r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
@@ -28,6 +30,6 @@ setup(
     license="MIT",
     description="An easy drop in user-provided Templating system. ",
     include_package_data=True,
-    install_requires=["discord.py", "expr.py"],
+    install_requires=requirements,
     python_requires=">=3.8.0",
 )

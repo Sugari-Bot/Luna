@@ -14,5 +14,5 @@ class MathBlock(Block):
             return None
         try:
             return str(expr.evaluate(ctx.verb.payload.strip(" "), max_safe_number=9e99))
-        except expr.ParsingError as error:
-            return str(error.friendly)
+        except expr.ParsingError:
+            return None

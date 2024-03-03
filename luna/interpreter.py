@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from itertools import islice
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from discord.utils import maybe_coroutine
 
@@ -20,7 +20,7 @@ __all__ = (
 
 log = logging.getLogger(__name__)
 
-AdapterDict = Dict[str, Adapter]
+AdapterMapping = Mapping[str, Adapter]
 
 
 class Node:
@@ -62,17 +62,22 @@ class Node:
 
 
 class Response:
-    __slots__ = ("body", "actions", "variables", "extra_kwargs")
+    __slots__ = (
+        "body",
+        "actions",
+        "variables",
+        "extra_kwargs",
+    )
 
     def __init__(
         self,
         *,
-        variables: Optional[AdapterDict] = None,
+        variables: Optional[AdapterMapping] = None,
         extra_kwargs: Optional[Dict[str, Any]] = None,
     ) -> None:
         self.body: Optional[str] = None
         self.actions: Dict[str, Any] = {}
-        self.variables: AdapterDict = variables if variables is not None else {}
+        self.variables: AdapterMapping = variables if variables is not None else {}
         self.extra_kwargs: Dict[str, Any] = (
             extra_kwargs if extra_kwargs is not None else {}
         )
@@ -82,7 +87,12 @@ class Response:
 
 
 class Context:
-    __slots__ = ("verb", "original_message", "interpreter", "response")
+    __slots__ = (
+        "verb",
+        "original_message",
+        "interpreter",
+        "response",
+    )
 
     def __init__(
         self,
@@ -103,8 +113,8 @@ class Context:
 class Interpreter:
     __slots__ = ("blocks",)
 
-    def __init__(self, blocks: List[Block]) -> None:
-        self.blocks: List[Block] = blocks
+    def __init__(self, blocks: Sequence[Block]) -> None:
+        self.blocks = blocks
 
     def __repr__(self) -> str:
         return f"<{type(self).__name__} blocks={self.blocks!r}>"
@@ -222,7 +232,7 @@ class Interpreter:
     def process(
         self,
         message: str,
-        seed_variables: Optional[AdapterDict] = None,
+        seed_variables: Optional[AdapterMapping] = None,
         *,
         charlimit: Optional[int] = None,
         **kwargs,
@@ -296,7 +306,7 @@ class AsyncInterpreter(Interpreter):
     async def process(
         self,
         message: str,
-        seed_variables: Optional[AdapterDict] = None,
+        seed_variables: Optional[AdapterMapping] = None,
         *,
         charlimit: Optional[int] = None,
         **kwargs,
